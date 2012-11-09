@@ -1,0 +1,8 @@
+
+    <resources>
+        <color name="gray_google">#666666</color>
+        <color name="red_google">#D50F25</color>
+        <color name="blue_google">#3369E8</color>
+        <color name="green_google">#009925</color>
+        <color name="yellow_google">#EEB211</color>
+    </resources>
