@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/gray_google" >
 
     <ImageButton
         android:id="@+id/imageButton_condition"
@@ -11,6 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
+        android:background="@color/red_google"
         android:contentDescription="@string/condition"
         android:padding="@dimen/list_elt_button_padding"
         android:src="@drawable/ic_launcher" />
@@ -22,6 +24,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/imageButton_condition"
         android:layout_marginRight="30dp"
+        android:background="@color/blue_google"
         android:contentDescription="@string/consequence"
         android:padding="@dimen/list_elt_button_padding"
         android:src="@drawable/ic_launcher" />
