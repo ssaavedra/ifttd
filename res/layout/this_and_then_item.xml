@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageButton
+        android:id="@+id/imageButton_condition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/condition"
+        android:padding="@dimen/list_elt_button_padding"
+        android:src="@drawable/ic_launcher" />
+
+    <ImageButton
+        android:id="@+id/imageButton_consequence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/imageButton_condition"
+        android:layout_marginRight="30dp"
+        android:contentDescription="@string/consequence"
+        android:padding="@dimen/list_elt_button_padding"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/textView_condition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageButton_condition"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="@+string/loading" />
+
+    <TextView
+        android:id="@+id/textView_consequence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView_condition"
+        android:layout_alignBottom="@+id/textView_condition"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="14dp"
+        android:text="@+string/loading" />
+
+</RelativeLayout>
