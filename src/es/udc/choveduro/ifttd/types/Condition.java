@@ -6,10 +6,10 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 
-@DatabaseTable()
+@DatabaseTable( tableName = "conditions" )
 abstract public class Condition {
 
-	@DatabaseField(foreign = true)
+	@DatabaseField(id = true, foreign = true)
 	private Accion belong_to;
 
 	@DatabaseField
@@ -29,5 +29,15 @@ abstract public class Condition {
 	protected final void setConfig(HashMap<String, String> config) {
 		this.config = config;
 	}
+
+	/**
+	 * Condition name (populated by subclass)
+	 */
+	abstract public String getName();
+
+	/**
+	 * Condition image resource
+	 */
+	abstract public int getImageResource();
 
 }

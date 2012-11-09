@@ -5,12 +5,11 @@ import java.util.HashMap;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-
-@DatabaseTable()
+@DatabaseTable(tableName = "consequences")
 public abstract class Consequence {
 
-	@DatabaseField(foreign = true)
-	protected Accion belong_to;
+	@DatabaseField(id = true, foreign = true)
+	private Accion belong_to;
 
 	@DatabaseField
 	private HashMap<String, String> config = new HashMap<String, String>();
@@ -29,4 +28,14 @@ public abstract class Consequence {
 	protected final void setConfig(HashMap<String, String> config) {
 		this.config = config;
 	}
+
+	/**
+	 * Consequence name (populated by subclass)
+	 */
+	abstract public String getName();
+
+	/**
+	 * Consequence image resource
+	 */
+	abstract public int getImageResource();
 }
