@@ -10,8 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:background="@color/red_google"
         android:contentDescription="@string/condition"
         android:padding="@dimen/list_elt_button_padding"
@@ -22,31 +23,64 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/imageButton_condition"
-        android:layout_marginRight="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:background="@color/blue_google"
         android:contentDescription="@string/consequence"
         android:padding="@dimen/list_elt_button_padding"
         android:src="@drawable/ic_launcher" />
 
     <TextView
-        android:id="@+id/textView_condition"
+        android:id="@+id/textView_condition_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/imageButton_condition"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
-        android:text="@+string/loading" />
+        android:layout_alignTop="@+id/imageButton_condition"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:layout_toRightOf="@+id/imageButton_condition"
+        android:text="@+string/condition_title_text" />
 
     <TextView
-        android:id="@+id/textView_consequence"
+        android:id="@+id/textView_consequence_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView_condition"
-        android:layout_alignBottom="@+id/textView_condition"
+        android:layout_alignTop="@+id/imageButton_condition"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="3dp"
+        android:layout_toLeftOf="@+id/imageButton_consequence"
+        android:text="@+string/consequence_title_text" />
+
+    <TextView
+        android:id="@+id/textView_condition_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_condition_title"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/imageButton_condition"
+        android:text="@+string/condition_subtitle_text" />
+
+    <TextView
+        android:id="@+id/textView_consequence_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_consequence_title"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="1dp"
+        android:layout_toLeftOf="@+id/imageButton_consequence"
+        android:text="@+string/consequence_subtitle_text" />
+
+    <ImageView
+        android:id="@+id/image_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="14dp"
-        android:text="@+string/loading" />
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@+string/arrow_desc"
+        android:src="@android:drawable/ic_menu_play_clip" />
 
 </RelativeLayout>
