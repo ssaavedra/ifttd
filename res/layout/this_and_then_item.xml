@@ -81,6 +81,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:contentDescription="@+string/arrow_desc"
-        android:src="@+id/flecha" /> <!-- TODO Set arrow image -->
+        android:src="@drawable/ic_menu_forward" />
 
 </RelativeLayout>

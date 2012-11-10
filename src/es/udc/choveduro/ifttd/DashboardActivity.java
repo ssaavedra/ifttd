@@ -1,7 +1,6 @@
 package es.udc.choveduro.ifttd;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.actionbarsherlock.view.Menu;
