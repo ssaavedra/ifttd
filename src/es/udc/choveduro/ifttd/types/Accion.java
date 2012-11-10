@@ -28,6 +28,7 @@ public class Accion {
 
 		final static class ViewHolder {
 			TextView cond_name, cons_name;
+			TextView cond_text, cons_text;
 			ImageView cond_img, cons_img;
 		}
 
@@ -59,9 +60,13 @@ public class Accion {
 
 				holder = new ViewHolder();
 				holder.cond_name = (TextView) item
-						.findViewById(R.id.textView_condition);
+						.findViewById(R.id.textView_condition_title);
 				holder.cons_name = (TextView) item
-						.findViewById(R.id.textView_consequence);
+						.findViewById(R.id.textView_consequence_title);
+				holder.cond_text = (TextView) item
+						.findViewById(R.id.textView_condition_subtitle);
+				holder.cons_text = (TextView) item
+						.findViewById(R.id.textView_consequence_subtitle);
 				holder.cond_img = (ImageView) item
 						.findViewById(R.id.imageButton_condition);
 				holder.cons_img = (ImageView) item
@@ -77,6 +82,8 @@ public class Accion {
 
 			holder.cond_name.setText(cond.getName());
 			holder.cons_name.setText(cons.getName());
+			holder.cond_text.setText(cond.getShortDesc());
+			holder.cons_text.setText(cons.getShortDesc());
 			holder.cond_img.setImageResource(cond.getImageResource());
 			holder.cons_img.setImageResource(cons.getImageResource());
 

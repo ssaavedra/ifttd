@@ -40,4 +40,9 @@ abstract public class Condition {
 	 */
 	abstract public int getImageResource();
 
+	/**
+	 * Short description.
+	 */
+	abstract public String getShortDesc();
+
 }

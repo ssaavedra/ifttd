@@ -38,4 +38,9 @@ public abstract class Consequence {
 	 * Consequence image resource
 	 */
 	abstract public int getImageResource();
+
+	/**
+	 * Short description.
+	 */
+	abstract public String getShortDesc();
 }
