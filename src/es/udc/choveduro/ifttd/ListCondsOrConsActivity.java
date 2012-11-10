@@ -3,16 +3,7 @@ package es.udc.choveduro.ifttd;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
-import es.udc.choveduro.ifttd.types.CallbackIF;
-import es.udc.choveduro.ifttd.types.CondOrCons;
-import es.udc.choveduro.ifttd.types.Condition;
-import es.udc.choveduro.ifttd.types.Consequence;
-
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.app.Activity;
-import android.app.ListActivity;
-import android.content.Context;
+
+import com.actionbarsherlock.view.Menu;
+
+import es.udc.choveduro.ifttd.types.CondOrCons;
 
 public abstract class ListCondsOrConsActivity extends EasyActivity {
 
@@ -37,7 +29,7 @@ public abstract class ListCondsOrConsActivity extends EasyActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.a, menu);
+    	getSupportMenuInflater().inflate(R.menu.a, menu);
         return true;
     }
     
@@ -65,7 +57,7 @@ public abstract class ListCondsOrConsActivity extends EasyActivity {
 			if (item == null) {
 				LayoutInflater inflater = (LayoutInflater) getContext()
 						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				item = inflater.inflate(R.layout.cond_of_cons_item, null);
+				item = inflater.inflate(R.layout.cond_or_cons_item, null);
 
 				holder = new ViewHolder();
 				holder.name = (TextView) item
