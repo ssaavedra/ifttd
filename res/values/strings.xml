@@ -7,5 +7,7 @@
     <string name="condition">Condición</string>
     <string name="consequence">Consecuencia</string>
     <string name="loading">Loading...</string>
+    <string name="cons_notif_cat_text">Texto a mostrar</string>
+    <string name="cons_notif_cat_ledcolor"></string>
 
 </resources>

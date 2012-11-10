@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="TextoCategoria"
+        android:title="@string/cons_notif_cat_text" >
+        <EditTextPreference android:key="notificationtext" android:title="Texto de la notificación"/>
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:key="ColorLed"
+        android:title="@string/cons_notif_cat_ledcolor" >
+        <ListPreference android:entries="@array/colorname" android:entryValues="@array/colorvalues" android:title="Color del LED" android:key="ledcolor"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -2,6 +2,8 @@ package es.udc.choveduro.ifttd.types;
 
 import java.util.HashMap;
 
+import android.content.Context;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -43,4 +45,11 @@ public abstract class Consequence {
 	 * Short description.
 	 */
 	abstract public String getShortDesc();
+
+
+	/**
+	 * Executes the consequence action.
+	 */
+	abstract public void run(Context c);
+
 }
