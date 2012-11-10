@@ -1,13 +1,11 @@
 package es.udc.choveduro.ifttd;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import es.udc.choveduro.ifttd.types.Accion;
 
 import android.os.Bundle;
-import android.util.SparseIntArray;
 import android.view.Menu;
 import android.widget.Adapter;
 

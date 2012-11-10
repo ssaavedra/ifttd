@@ -7,5 +7,7 @@
     <string name="condition">Condición</string>
     <string name="consequence">Consecuencia</string>
     <string name="loading">Loading...</string>
+    <string name="cancel">Cancel</string>
+    <string name="accept">Accept</string>
 
 </resources>

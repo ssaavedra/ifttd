@@ -31,6 +31,11 @@ abstract public class Condition {
 		this.config = config;
 	}
 
+	protected void setConfig(String string, String value) {
+		this.config.put(string, value);
+
+	}
+
 	/**
 	 * Condition name (populated by subclass)
 	 */
