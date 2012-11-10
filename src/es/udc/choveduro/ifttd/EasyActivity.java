@@ -20,7 +20,7 @@ public class EasyActivity extends SherlockActivity {
 		super();
 	}
 
-	public void launchActivity(Class subActivityClass, CallbackIF callback) {
+	public void launchActivity(Class<? extends Activity> subActivityClass, CallbackIF callback) {
 	
 		Intent i = new Intent(this, subActivityClass);
 	

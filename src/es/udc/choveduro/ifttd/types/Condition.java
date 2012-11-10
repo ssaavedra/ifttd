@@ -5,8 +5,9 @@ import java.util.HashMap;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import es.udc.choveduro.ifttd.EasyActivity;
 
-@DatabaseTable( tableName = "conditions" )
+@DatabaseTable(tableName = "conditions")
 abstract public class Condition {
 
 	@DatabaseField(id = true, foreign = true)
@@ -30,6 +31,11 @@ abstract public class Condition {
 		this.config = config;
 	}
 
+	protected void setConfig(String string, String value) {
+		this.config.put(string, value);
+
+	}
+
 	/**
 	 * Condition name (populated by subclass)
 	 */
@@ -44,5 +50,11 @@ abstract public class Condition {
 	 * Short description.
 	 */
 	abstract public String getShortDesc();
+
+	/**
+	 * Configure the condition through an activity
+	 */
+
+	public abstract void configure(EasyActivity ctx, CallbackIF callback);
 
 }
