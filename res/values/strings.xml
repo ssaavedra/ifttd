@@ -11,5 +11,6 @@
     <string name="cons_notif_cat_ledcolor"></string>
     <string name="cancel">Cancel</string>
     <string name="accept">Accept</string>
+    <string name="delete_action">Delete action</string>
 
 </resources>
