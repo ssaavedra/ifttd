@@ -2,6 +2,8 @@ package es.udc.choveduro.ifttd;
 
 import java.util.Random;
 
+import com.actionbarsherlock.app.SherlockActivity;
+
 import es.udc.choveduro.ifttd.types.CallbackIF;
 import android.app.Activity;
 import android.content.Intent;
@@ -9,7 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 
-public class EasyActivity extends Activity {
+public class EasyActivity extends SherlockActivity {
 
 	/** holds the map of callbacks */
 	protected SparseArray<CallbackIF> _callbackMap = new SparseArray<CallbackIF>();
