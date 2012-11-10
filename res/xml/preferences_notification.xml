@@ -4,13 +4,18 @@
     <PreferenceCategory
         android:key="TextoCategoria"
         android:title="@string/cons_notif_cat_text" >
-        <EditTextPreference android:key="notificationtext" android:title="Texto de la notificación"/>
+        <EditTextPreference
+            android:key="notificationtext"
+            android:title="Texto de la notificación" />
     </PreferenceCategory>
-    
     <PreferenceCategory
         android:key="ColorLed"
         android:title="@string/cons_notif_cat_ledcolor" >
-        <ListPreference android:entries="@array/colorname" android:entryValues="@array/colorvalues" android:title="Color del LED" android:key="ledcolor"/>
+        <ListPreference
+            android:entries="@array/colorname"
+            android:entryValues="@array/colorvalues"
+            android:key="ledcolor"
+            android:title="Color del LED" />
     </PreferenceCategory>
 
 </PreferenceScreen>

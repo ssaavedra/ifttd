@@ -2,15 +2,9 @@
 <resources>
 
     <string-array name="colorname" >
-        <item>
-Rojo
-        </item>
-        <item>
-Blanco
-        </item>
-        <item>
-Azul
-        </item>
+        <item>Rojo</item>
+        <item>Blanco</item>
+        <item>Azul    </item>
         <item>
 Verde
         </item>

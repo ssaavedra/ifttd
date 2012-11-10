@@ -5,17 +5,17 @@ package es.udc.choveduro.ifttd.consequences;
 
 import java.util.HashMap;
 
-import android.app.Activity;
-import android.app.ListActivity;
 import android.app.Notification;
-import android.app.Notification.Builder;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+import es.udc.choveduro.ifttd.types.CallbackIF;
 import es.udc.choveduro.ifttd.types.Consequence;
+import es.udc.choveduro.ifttd.EasyActivity;
 import es.udc.choveduro.ifttd.R;
 
 /**
@@ -52,13 +52,7 @@ public class ShowNotification extends Consequence {
 	@Override
 	public String getShortDesc() {
 		HashMap<String, String> configuration = this.getConfig();
-		return "Se muestra " + "\"" + configuration.get("text") + "\".";
-	}
-
-	public void saveConfig(){
-		 HashMap<String, String> configuration = this.getConfig();
-		 configuration.put("texto", "valor");
-		 configuration.put("ledcolor", "valor");
+		return "Shows \"" + configuration.get("text") + "\".";
 	}
 	
 	public class PrefsActivity extends PreferenceActivity {
@@ -68,6 +62,7 @@ public class ShowNotification extends Consequence {
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preferences_notification);
+			setContentView(R.layout.preferences_general);
 		}
 	}
 
@@ -89,9 +84,29 @@ public class ShowNotification extends Consequence {
 			    (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		mNotificationManager.notify(this.hashCode(), notification);
+	}
+
+	@Override
+	public void configure(final EasyActivity ctx, final CallbackIF callback) {
 		
-		mNotificationManager.notify(2, notification);
-	
+		ctx.launchActivity(PrefsActivity.class, new CallbackIF(){
+
+			@Override
+			public void resultOK(String resultString, Bundle resultMap) {
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+
+				HashMap<String, String> configuration = ShowNotification.this.getConfig();
+				configuration.put("texto", prefs.getString("text", "Mensaje!!"));
+				configuration.put("ledcolor", prefs.getString("ledcolor", "blanco"));
+				callback.resultOK(resultString, resultMap);
+			}
+
+			@Override
+			public void resultCancel(String resultString, Bundle resultMap) {
+				callback.resultCancel(resultString, resultMap);			
+			}
+		});
+		
 	}
 
 }
