@@ -1,16 +1,17 @@
 package es.udc.choveduro.ifttd;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import es.udc.choveduro.ifttd.types.Accion;
 
 import android.os.Bundle;
-import android.app.Activity;
+import android.util.SparseIntArray;
 import android.view.Menu;
 import android.widget.Adapter;
 
-public class DashboardActivity extends Activity {
+public class DashboardActivity extends EasyActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,4 +30,5 @@ public class DashboardActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_dashboard, menu);
 		return true;
 	}
+
 }
