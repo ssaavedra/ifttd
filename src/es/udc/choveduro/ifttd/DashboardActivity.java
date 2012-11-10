@@ -28,6 +28,10 @@ import com.actionbarsherlock.view.MenuItem;
 import es.udc.choveduro.ifttd.service.OwlService;
 import es.udc.choveduro.ifttd.service.OwlService.OwlBinder;
 import es.udc.choveduro.ifttd.types.Accion;
+import es.udc.choveduro.ifttd.types.CallbackIF;
+import es.udc.choveduro.ifttd.types.Condition;
+import es.udc.choveduro.ifttd.types.ConditionSelectorActivity;
+import es.udc.choveduro.ifttd.types.Consequence;
 
 public class DashboardActivity extends EasyActivity {
 
@@ -119,7 +123,6 @@ public class DashboardActivity extends EasyActivity {
 				return false;
 			}
 		});
-
 	}
 
 	@Override
@@ -133,8 +136,27 @@ public class DashboardActivity extends EasyActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.add_icon) {
 			Toast.makeText(this, "Añadir pulsado", Toast.LENGTH_SHORT).show();
-		}
+			final Condition cond;
+			final Consequence cons;
 
+			this.launchActivity(ConditionSelectorActivity.class,
+					new CallbackIF() {
+
+						@Override
+						public void resultOK(String resultString,
+								Bundle resultMap) {
+							cond = null;
+							DashboardActivity.this.addActionStep1(cond);
+						}
+
+						@Override
+						public void resultCancel(String resultString,
+								Bundle resultMap) {
+							DashboardActivity.this.addCancel();
+						}
+
+					});
+		}
 		return true;
 	}
 
@@ -142,6 +164,16 @@ public class DashboardActivity extends EasyActivity {
 	public void onDestroy() {
 		super.onDestroy();
 		unbindService(mConnection);
+	}
+
+	protected void addCancel() {
+		// TODO Auto-generated method stub
+
+	}
+
+	protected void addActionStep1(Condition cond) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
