@@ -78,9 +78,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:contentDescription="@+string/arrow_desc"
-        android:src="@android:drawable/ic_menu_play_clip" />
+        android:src="@+id/flecha" /> <!-- TODO Set arrow image -->
 
 </RelativeLayout>
