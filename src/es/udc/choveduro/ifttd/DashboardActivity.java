@@ -7,10 +7,8 @@ import es.udc.choveduro.ifttd.types.Accion;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
 import android.view.Menu;
 import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 
 public class DashboardActivity extends Activity {
 
