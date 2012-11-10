@@ -11,5 +11,6 @@
     <string name="cons_notif_cat_ledcolor"></string>
     <string name="cancel">Cancel</string>
     <string name="accept">Accept</string>
+    <string name="title_activity_list_conds_or_cons">ListCondsOrConsActivity</string>
 
 </resources>
