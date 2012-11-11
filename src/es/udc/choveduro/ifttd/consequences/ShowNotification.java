@@ -3,6 +3,7 @@
  */
 package es.udc.choveduro.ifttd.consequences;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import android.app.Notification;
@@ -52,7 +53,7 @@ public class ShowNotification extends Consequence {
 	 */
 	@Override
 	public String getShortDesc() {
-		HashMap<String, String> configuration = this.getConfig();
+		HashMap<String, Serializable> configuration = this.getConfig();
 		return "Shows \"" + configuration.get("text") + "\".";
 	}
 	
@@ -75,10 +76,10 @@ public class ShowNotification extends Consequence {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void run(Context c) {
-		HashMap<String, String> configuration = this.getConfig();
-		int color = Color.parseColor(configuration.get("ledcolor"));
+		HashMap<String, Serializable> configuration = this.getConfig();
+		int color = Color.parseColor((String) configuration.get("ledcolor"));
 		
-		Notification notification = new Notification(this.getImageResource(), configuration.get("text"), System.currentTimeMillis());
+		Notification notification = new Notification(this.getImageResource(), (String) configuration.get("text"), System.currentTimeMillis());
 
 		notification.ledARGB = color;
 	    notification.ledOnMS = 300;
@@ -101,7 +102,7 @@ public class ShowNotification extends Consequence {
 			public void resultOK(String resultString, Bundle resultMap) {
 				SharedPreferences prefs = ShowNotification.PrefsActivity.sp;
 
-				HashMap<String, String> configuration = ShowNotification.this.getConfig();
+				HashMap<String, Serializable> configuration = ShowNotification.this.getConfig();
 				configuration.put("texto", prefs.getString("text", "Mensaje!!"));
 				configuration.put("ledcolor", prefs.getString("ledcolor", "blanco"));
 				callback.resultOK(resultString, resultMap);

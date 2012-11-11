@@ -1,15 +1,15 @@
 package es.udc.choveduro.ifttd.types;
 
-import es.udc.choveduro.ifttd.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import es.udc.choveduro.ifttd.R;
 
 public class ConfigurationActivity extends Activity {
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState, int layout) {
 		super.onCreate(savedInstanceState);
+		setContentView(layout);
 		setResult(RESULT_CANCELED);
 		findViewById(R.id.configure_accept_button).setOnClickListener(
 				new OnClickListener() {

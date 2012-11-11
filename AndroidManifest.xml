@@ -49,6 +49,10 @@
             android:label="@string/title_activity_consequence_selector" >
         </activity>
         
+        <activity android:name=".conditions.OnTimeCondition$Activity" />
+        <activity android:name=".conditions.OnLocationCondition$PrefsActivity" />
+        <activity android:name=".consequences.ShowNotification$Activity" />
+        
         <service
             android:name=".service.OwlService"
             android:isolatedProcess="false" >
