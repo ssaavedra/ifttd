@@ -11,8 +11,6 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import es.udc.choveduro.ifttd.types.Accion;
-import es.udc.choveduro.ifttd.types.Condition;
-import es.udc.choveduro.ifttd.types.Consequence;
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	
@@ -20,29 +18,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private final static int DATABASE_VERSION = 1;
 	private final String LOG_NAME = getClass().getName();
 
-	private Dao<Condition, Accion> conditionDao;
-	private Dao<Consequence, Accion> consequenceDao;
 	private Dao<Accion, Integer> accionDao;
-
-	/**
-	 * @return the conditionDao
-	 * @throws java.sql.SQLException
-	 */
-	public final Dao<Condition, Accion> getConditionDao() throws java.sql.SQLException {
-		if(conditionDao == null)
-			conditionDao = getDao(Condition.class);
-		return conditionDao;
-	}
-
-	/**
-	 * @return the consequenceDao
-	 * @throws java.sql.SQLException 
-	 */
-	public final Dao<Consequence, Accion> getConsequenceDao() throws java.sql.SQLException {
-		if(consequenceDao == null)
-			consequenceDao = getDao(Consequence.class);
-		return consequenceDao;
-	}
 
 	/**
 	 * @return the accionDao
@@ -62,8 +38,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	public void onCreate(SQLiteDatabase sqliteDatabase,
 			ConnectionSource connectionSource) {
 		try {
-			TableUtils.createTable(connectionSource, Condition.class);
-			TableUtils.createTable(connectionSource, Consequence.class);
 			TableUtils.createTable(connectionSource, Accion.class);
 		} catch (SQLException e) {
 			Log.e(LOG_NAME, "OMRLite could not create new tables", e);

@@ -22,7 +22,9 @@ import com.actionbarsherlock.view.MenuItem;
 import es.udc.choveduro.ifttd.service.OwlService;
 import es.udc.choveduro.ifttd.types.Accion;
 import es.udc.choveduro.ifttd.types.CallbackIF;
+import es.udc.choveduro.ifttd.types.Condition;
 import es.udc.choveduro.ifttd.types.ConfigurablesListActivity;
+import es.udc.choveduro.ifttd.types.Consequence;
 
 public class DashboardActivity extends EasyActivity {
 
@@ -121,12 +123,13 @@ public class DashboardActivity extends EasyActivity {
 		@Override
 		public void resultOK(String resultString, Bundle resultMap) {
 			int currentCondition = resultMap.getInt("position");
-			ctx.launchActivity(ConfigurablesListActivity.class,
+			ctx.launchActivity(Consequence.Activity.class,
 					ctx.new Callback_Consequence(ctx, currentCondition));
 		}
 
 		@Override
 		public void resultCancel(String resultString, Bundle resultMap) {
+			ctx.mService.unwind();
 		}
 
 	}
@@ -154,7 +157,7 @@ public class DashboardActivity extends EasyActivity {
 
 		@Override
 		public void resultCancel(String resultString, Bundle resultMap) {
-			// Cleanup service variables.
+			mService.unwind();
 		}
 	}
 
@@ -163,7 +166,7 @@ public class DashboardActivity extends EasyActivity {
 		if (item.getItemId() == R.id.add_icon) {
 			Toast.makeText(this, "Añadir pulsado", Toast.LENGTH_SHORT).show();
 
-			launchActivity(ConfigurablesListActivity.class,
+			launchActivity(Condition.Activity.class,
 					new Callback_Condition(this));
 
 			return true;
