@@ -76,6 +76,7 @@ public class EasyActivity extends SherlockActivity {
 	}
 	
 	protected void onDestroy() {
+		super.onDestroy();
 		if(mBound) {
 			unbindService(mConnection);
 		}
