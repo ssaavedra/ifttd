@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory android:title="Localizacion" android:key="location">
+        
+        <PreferenceScreen android:title="Introducir Coordenadas">
+            <EditTextPreference android:key="latitud"/>
+            <EditTextPreference android:key="longitud"/>
+        </PreferenceScreen><Preference android:key="find_place"/>
+        <Preference android:key="select_place_map"/>
+        
+    </PreferenceCategory><PreferenceCategory>
+        <EditTextPreference android:key="distance"/>
+    </PreferenceCategory>
+    
+
+</PreferenceScreen>
