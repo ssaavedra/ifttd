@@ -61,7 +61,8 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 		mService = service;
 		Log.w(LOG_NAME, "Connected to service.");
 		Log.e(LOG_NAME, "Service has this arraylist: " + fetchFromService());
-		loadedItemsAdapter.addAll(fetchFromService());
+		loadedItems.addAll(fetchFromService());
+		loadedItemsAdapter.notifyDataSetChanged();
 	}
 
 	/**

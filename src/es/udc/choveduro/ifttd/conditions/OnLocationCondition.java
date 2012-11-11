@@ -4,6 +4,7 @@
 package es.udc.choveduro.ifttd.conditions;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -83,7 +84,7 @@ public class OnLocationCondition extends Condition {
 
 			@Override
 			public void resultOK(String resultString, Bundle resultMap) {
-				HashMap<String, String> configuration = OnLocationCondition.this.getConfig();
+				HashMap<String, Serializable> configuration = OnLocationCondition.this.getConfig();
 				configuration.put("latitude", OnLocationCondition.PrefsActivity.sp.getString("latitud", "0"));
 				configuration.put("longitude", OnLocationCondition.PrefsActivity.sp.getString("longitud", "0"));
 				configuration.put("distance", OnLocationCondition.PrefsActivity.sp.getString("distance", "0"));
