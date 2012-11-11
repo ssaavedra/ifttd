@@ -68,10 +68,12 @@ public class OwlService extends OrmLiteBaseService<DatabaseHelper> {
 		return dbh.getAccionDao();
 	}
 
+	@Deprecated
 	public Dao<Condition, Accion> getConditionDao() throws SQLException {
 		return dbh.getConditionDao();
 	}
 
+	@Deprecated
 	public Dao<Consequence, Accion> getConsequenceDao() throws SQLException {
 		return dbh.getConsequenceDao();
 	}
@@ -79,11 +81,11 @@ public class OwlService extends OrmLiteBaseService<DatabaseHelper> {
 	public ArrayList<Condition> getConditions() {
 		return conditionCache;
 	}
-	
+
 	public ArrayList<Consequence> getConsequences() {
 		return consequenceCache;
 	}
-	
+
 	public void startTransaction() {
 		transactionAction = new Accion();
 		transactionInProcess = true;
@@ -108,27 +110,28 @@ public class OwlService extends OrmLiteBaseService<DatabaseHelper> {
 		transactionAction = new Accion();
 		transactionAction.setConsec(transactionConsequence);
 		transactionAction.setCond(transactionCond);
-		transactionCond.setAction(transactionAction);
-		transactionConsequence.setAction(transactionAction);
 		try {
 			dbh.getAccionDao().create(transactionAction);
-			dbh.getConditionDao().create(transactionCond);
-			dbh.getConsequenceDao().create(transactionConsequence);
+			// dbh.getConditionDao().create(transactionCond);
+			// dbh.getConsequenceDao().create(transactionConsequence);
 		} catch (SQLException e) {
 			Log.e(TAG, "SQL Exception when creating things...", e);
 
 			try {
 				dbh.getAccionDao().delete(transactionAction);
-				dbh.getConditionDao().delete(transactionCond);
-				dbh.getConsequenceDao().delete(transactionConsequence);
+				// dbh.getConditionDao().delete(transactionCond);
+				// dbh.getConsequenceDao().delete(transactionConsequence);
 			} catch (SQLException e1) {
 			} finally {
 				Log.e(TAG, "SQL Exception again on deletion.");
 				consequenceCache.remove(transactionConsequence);
+				conditionCache.remove(transactionCond);
 				try {
 					// Create new instances on the cache of the same type ;-)
-					consequenceCache.add(transactionConsequence.getClass().newInstance());
-					conditionCache.add(transactionCond.getClass().newInstance());
+					consequenceCache.add(transactionConsequence.getClass()
+							.newInstance());
+					conditionCache
+							.add(transactionCond.getClass().newInstance());
 				} catch (Exception e1) {
 				}
 			}

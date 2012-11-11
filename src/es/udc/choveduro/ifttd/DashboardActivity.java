@@ -6,14 +6,9 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,59 +21,34 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import es.udc.choveduro.ifttd.service.OwlService;
-import es.udc.choveduro.ifttd.service.OwlService.OwlBinder;
 import es.udc.choveduro.ifttd.types.Accion;
 import es.udc.choveduro.ifttd.types.CallbackIF;
-import es.udc.choveduro.ifttd.types.Condition;
 import es.udc.choveduro.ifttd.types.ConfigurablesListActivity;
-import es.udc.choveduro.ifttd.types.Consequence;
 
 public class DashboardActivity extends EasyActivity {
 
-	OwlService mService;
-	protected boolean mBound;
 	private ProgressDialog loading;
+	private OwlService mService;
 	public static final String LOG_NAME = DashboardActivity.class.getName();
 
 	List<Accion> loadedActions = new ArrayList<Accion>();
 	Accion.Adapter loadedActionsAdapter = null;
 
-	/** Defines callbacks for service binding, passed to bindService() */
-	private ServiceConnection mConnection = new ServiceConnection() {
-
-		@Override
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			// We've bound to LocalService, cast the IBinder and get
-			// LocalService instance
-			OwlBinder binder = (OwlBinder) service;
-			mService = binder.getService();
-			mBound = true;
-			loading.dismiss();
-			try {
-				loadedActions.addAll(mService.getAccionDao().queryForAll());
-				loadedActionsAdapter.notifyDataSetChanged();
-			} catch (SQLException e) {
-			}
+	@Override
+	public void onServiceConnected(OwlService mService) {
+		this.mService = mService;
+		loading.dismiss();
+		try {
+			loadedActions.addAll(mService.getAccionDao().queryForAll());
+			loadedActionsAdapter.notifyDataSetChanged();
+		} catch (SQLException e) {
 		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName arg0) {
-			mBound = false;
-		}
-	};
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dashboard);
-
-		// We should start the service and bind to it.
-		Intent intent = new Intent(this, OwlService.class);
-		this.startService(intent);
-
-		// Bind to service
-		bindService(intent, mConnection, Context.BIND_ADJUST_WITH_ACTIVITY
-				| Context.BIND_AUTO_CREATE);
 
 		// Put a progressbar until we are actually connected to the service.
 		loading = ProgressDialog.show(this, "Initializing",
@@ -110,6 +80,8 @@ public class DashboardActivity extends EasyActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						try {
+							Accion a = loadedActions.get(position);
+							a.setStatus(Accion.STATUS.DISABLED);
 							mService.getAccionDao().delete(
 									loadedActions.get(position));
 						} catch (SQLException e) {
@@ -128,7 +100,6 @@ public class DashboardActivity extends EasyActivity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		unbindService(mConnection);
 	}
 
 	@Override
@@ -144,10 +115,12 @@ public class DashboardActivity extends EasyActivity {
 		public Callback_Condition(DashboardActivity ctx) {
 			this.ctx = ctx;
 		}
+
 		@Override
 		public void resultOK(String resultString, Bundle resultMap) {
 			int currentCondition = resultMap.getInt("position");
-			ctx.launchActivity(ConfigurablesListActivity.class, ctx.new Callback_Consequence(ctx, currentCondition));
+			ctx.launchActivity(ConfigurablesListActivity.class,
+					ctx.new Callback_Consequence(ctx, currentCondition));
 		}
 
 		@Override
@@ -155,11 +128,11 @@ public class DashboardActivity extends EasyActivity {
 		}
 
 	}
-	
+
 	final public class Callback_Consequence implements CallbackIF {
 		private EasyActivity ctx;
 		private int cond;
-		
+
 		public Callback_Consequence(EasyActivity ctx, int cond) {
 			this.ctx = ctx;
 			this.cond = cond;
@@ -169,9 +142,11 @@ public class DashboardActivity extends EasyActivity {
 		public void resultOK(String resultString, Bundle resultMap) {
 			// Hoorray, refresh my array
 			try {
-				loadedActions.add(mService.getAccionDao().queryForId(resultMap.getInt("id")));
+				loadedActions.add(mService.getAccionDao().queryForId(
+						resultMap.getInt("id")));
 			} catch (SQLException e) {
-				Log.e(LOG_NAME, "Err, could not get recently created action.", e);
+				Log.e(LOG_NAME, "Err, could not get recently created action.",
+						e);
 			}
 		}
 

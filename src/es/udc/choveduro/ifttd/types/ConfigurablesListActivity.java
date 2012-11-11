@@ -1,10 +1,7 @@
 package es.udc.choveduro.ifttd.types;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.http.MethodNotSupportedException;
 
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -30,9 +27,6 @@ import com.actionbarsherlock.view.Menu;
 import es.udc.choveduro.ifttd.DashboardActivity;
 import es.udc.choveduro.ifttd.EasyActivity;
 import es.udc.choveduro.ifttd.R;
-import es.udc.choveduro.ifttd.R.id;
-import es.udc.choveduro.ifttd.R.layout;
-import es.udc.choveduro.ifttd.R.menu;
 import es.udc.choveduro.ifttd.service.OwlService;
 import es.udc.choveduro.ifttd.service.OwlService.OwlBinder;
 
