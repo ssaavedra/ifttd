@@ -67,7 +67,7 @@ final public class OnTimeCondition extends Condition {
 	}
 
 	public static final String NAME = "On Time...";
-	public static final int ImageResource = R.drawable.ic_launcher;
+	public static final int ImageResource = R.drawable.ic_menu_clock;
 	public static final String shortDesc = "Fires at specified time";
 	private Calendar dateCalendar = new GregorianCalendar();
 	private static Calendar configCalendar = new GregorianCalendar();
