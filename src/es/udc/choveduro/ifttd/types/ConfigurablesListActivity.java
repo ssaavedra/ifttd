@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -43,19 +44,14 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 		loadedItemsAdapter = new ItemAdapter<T>(this,
 				R.layout.cond_or_cons_item, loadedItems);
 		l.setAdapter(loadedItemsAdapter);
-		l.setOnItemSelectedListener(new OnItemSelectedListener() {
+		l.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> listView, View child,
+			public void onItemClick(AdapterView<?> listView, View child,
 					int position, long id) {
 
 				Log.i(LOG_NAME, new StringBuffer("Clicked action at position ")
 						.append(Integer.toString(position)).toString());
 				onClickedAction(position);
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-
 			}
 		});
 	}
@@ -143,15 +139,22 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 				public void onClick(View v) {
 					Toast.makeText(ctx, "Pressed arrow", Toast.LENGTH_SHORT)
 							.show();
+
+					Log.i(LOG_NAME, new StringBuffer("Clicked ARROW at position ")
+							.append(Integer.toString(position)).toString());
+					ctx.onClickedAction(position);
 				}
 
 			});
+		
 			holder.name.setText(ctx.loadedItems.get(position).getName());
 			holder.img.setImageResource(ctx.loadedItems.get(position)
 					.getImageResource());
 
 			return (item);
+		
 		}
+		
 	}
 
 	public static class Callback implements CallbackIF {
