@@ -13,5 +13,6 @@
     <string name="accept">Accept</string>
     <string name="title_activity_list_conds_or_cons">ListCondsOrConsActivity</string>
     <string name="delete_action">Delete action</string>
+    <string name="GoogleMapsAPIKey">KEY</string>
 
 </resources>

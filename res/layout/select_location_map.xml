@@ -3,15 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/titulo_select_point"
+    <EditText
+        android:id="@+id/location_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="17dp"
-        android:text="TextView" />
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:inputType="text" >
+
+    </EditText>
 
     <com.google.android.maps.MapView
         android:id="@+id/mapviewselect"
@@ -19,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/titulo_select_point"
+        android:layout_below="@id/location_field"
         android:apiKey="@string/GoogleMapsAPIKey"
         android:clickable="true" />
 
@@ -30,5 +33,13 @@
         android:layout_below="@+id/mapviewselect"
         android:layout_marginTop="10dp"
         layout="@layout/configuration_ok_cancel_buttons" />
+
+    <ImageButton
+        android:id="@+id/searchLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/location_field"
+        android:layout_toRightOf="@+id/location_field"
+        android:src="@drawable/ic_action_search" />
 
 </RelativeLayout>

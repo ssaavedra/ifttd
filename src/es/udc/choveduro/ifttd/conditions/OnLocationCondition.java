@@ -3,16 +3,24 @@
  */
 package es.udc.choveduro.ifttd.conditions;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -68,8 +76,33 @@ public class OnLocationCondition extends Condition {
 	 */
 	@Override
 	public void configure(EasyActivity ctx, CallbackIF callback) {
-		// TODO Auto-generated method stub
+		ctx.launchActivity(PrefsActivity.class, new CallbackIF(){
 
+			@Override
+			public void resultOK(String resultString, Bundle resultMap) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void resultCancel(String resultString, Bundle resultMap) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+
+	}
+	
+	public final class PrefsActivity extends PreferenceActivity {
+
+		@SuppressWarnings("deprecation")
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.preferences_location);
+			setContentView(R.layout.preferences_general);
+		}
 	}
 
 	public final class SetLocationMapActivity extends MapActivity {
@@ -88,8 +121,9 @@ public class OnLocationCondition extends Condition {
 
 				// ---add the marker---
 				Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-						R.drawable.pushpin);
-				canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 50, null);
+						R.drawable.symbol_inf);
+				
+				canvas.drawBitmap(bmp, (screenPts.x - bmp.getWidth())/2, (screenPts.y - bmp.getHeight())/2, null);
 				return true;
 			}
 		}
@@ -147,6 +181,106 @@ public class OnLocationCondition extends Condition {
 				@Override
 				public void onClick(View v) {
 					SetLocationMapActivity.this.finish();
+				}
+
+			});
+		}
+
+		@Override
+		protected boolean isRouteDisplayed() {
+			return false;
+		}
+
+	}
+
+	public final class SetPlaceMapActivity extends MapActivity {
+
+		GeoPoint p;
+
+		class PuntoMapOverlay extends com.google.android.maps.Overlay {
+			@Override
+			public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
+					long when) {
+				super.draw(canvas, mapView, shadow);
+
+				// ---translate the GeoPoint to screen pixels---
+				Point screenPts = new Point();
+				mapView.getProjection().toPixels(p, screenPts);
+
+				// ---add the marker---
+				Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+						R.drawable.symbol_inf);
+				
+				canvas.drawBitmap(bmp, (screenPts.x - bmp.getWidth())/2, (screenPts.y - bmp.getHeight())/2, null);
+				return true;
+			}
+		}
+		
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.select_point_map);
+
+			final MapView map = (MapView) findViewById(R.id.mapviewselect);
+			map.setBuiltInZoomControls(true);
+			
+			Button b_search = (Button) findViewById(R.id.searchLocationButton);
+			b_search.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					
+					EditText tf =  (EditText)findViewById(R.id.location_field);
+					String sitio =  tf.getText().toString();
+					
+					if(sitio.equals("")){
+		                Toast.makeText(SetPlaceMapActivity.this, "Write something!!", Toast.LENGTH_SHORT).show();
+						return;
+					}
+					
+					Geocoder geoCoder = new Geocoder(SetPlaceMapActivity.this, Locale.getDefault());    
+			        try {
+			            List<Address> addresses = geoCoder.getFromLocationName(
+			                sitio, 5);
+			            String add = "";
+			            //TODO Allow to select among posibilities
+			            if (addresses.size() > 0) {
+			                p = new GeoPoint(
+			                        (int) (addresses.get(0).getLatitude() * 1E6), 
+			                        (int) (addresses.get(0).getLongitude() * 1E6));
+			                Toast.makeText(SetPlaceMapActivity.this, "Localizacion: " + addresses.get(0).getFeatureName(), Toast.LENGTH_SHORT).show();
+			                map.getOverlays().clear();
+			                map.getOverlays().add(new PuntoMapOverlay());
+			            }    
+			        } catch (IOException e) {
+			            e.printStackTrace();
+			        }					
+				}
+					
+			});
+			
+			Button b_accept = (Button) findViewById(R.id.configure_accept_button);
+			b_accept.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if (p != null) {
+						//TODO update data!!
+		                Toast.makeText(SetPlaceMapActivity.this, "Actualizar datos!!", Toast.LENGTH_SHORT).show();
+						SetPlaceMapActivity.this.finish();
+
+					} else {
+		                Toast.makeText(SetPlaceMapActivity.this, "Click Somewhere!!", Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
+
+			Button b_cancel = (Button) findViewById(R.id.configure_accept_button);
+			b_cancel.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					SetPlaceMapActivity.this.finish();
 				}
 
 			});

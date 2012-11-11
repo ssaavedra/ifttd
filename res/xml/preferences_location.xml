@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <PreferenceCategory android:title="Localizacion" android:key="location">
-        
-        <PreferenceScreen android:title="Introducir Coordenadas">
-            <EditTextPreference android:key="latitud"/>
-            <EditTextPreference android:key="longitud"/>
-        </PreferenceScreen><Preference android:key="find_place"/>
-        <Preference android:key="select_place_map"/>
-        
-    </PreferenceCategory><PreferenceCategory>
-        <EditTextPreference android:key="distance"/>
+
+    <PreferenceCategory
+        android:key="location"
+        android:title="Localizacion" >
+        <PreferenceScreen android:title="Introducir Coordenadas" >
+            <EditTextPreference android:key="latitud" />
+            <EditTextPreference android:key="longitud" />
+        </PreferenceScreen>
+
+        <Preference
+            android:summary=""
+            android:title="Marcar en mapa" android:enabled="true">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="es.udc.choveduro.ifttd.conditions.OnLocationCondition.SetLocationMapActivity"
+                android:targetPackage="es.udc.choveduro.ifttd.conditions" />
+        </Preference>
+        <Preference
+            android:summary=" "
+            android:title="Buscar Sitio" android:enabled="true">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.package.name.ActivityName"
+                android:targetPackage="com.package.name" />
+        </Preference>
     </PreferenceCategory>
-    
+    <PreferenceCategory>
+        <EditTextPreference android:key="distance" />
+    </PreferenceCategory>
 
 </PreferenceScreen>
