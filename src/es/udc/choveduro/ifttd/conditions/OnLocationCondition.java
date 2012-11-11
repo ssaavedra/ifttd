@@ -4,6 +4,7 @@
 package es.udc.choveduro.ifttd.conditions;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,6 +17,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +31,7 @@ import com.google.android.maps.MapView;
 
 import es.udc.choveduro.ifttd.EasyActivity;
 import es.udc.choveduro.ifttd.R;
+import es.udc.choveduro.ifttd.consequences.ShowNotification;
 import es.udc.choveduro.ifttd.types.CallbackIF;
 import es.udc.choveduro.ifttd.types.Condition;
 
@@ -75,18 +78,21 @@ public class OnLocationCondition extends Condition {
 	 * .EasyActivity, es.udc.choveduro.ifttd.types.CallbackIF)
 	 */
 	@Override
-	public void configure(EasyActivity ctx, CallbackIF callback) {
+	public void configure(EasyActivity ctx, final CallbackIF callback) {
 		ctx.launchActivity(PrefsActivity.class, new CallbackIF(){
 
 			@Override
 			public void resultOK(String resultString, Bundle resultMap) {
-				// TODO Auto-generated method stub
-				
+				HashMap<String, String> configuration = OnLocationCondition.this.getConfig();
+				configuration.put("latitude", OnLocationCondition.PrefsActivity.sp.getString("latitud", "0"));
+				configuration.put("longitude", OnLocationCondition.PrefsActivity.sp.getString("longitud", "0"));
+				configuration.put("distance", OnLocationCondition.PrefsActivity.sp.getString("distance", "0"));
+				callback.resultCancel(resultString, resultMap);
 			}
 
 			@Override
 			public void resultCancel(String resultString, Bundle resultMap) {
-				// TODO Auto-generated method stub
+				callback.resultCancel(resultString, resultMap);
 				
 			}
 			
@@ -94,18 +100,25 @@ public class OnLocationCondition extends Condition {
 
 	}
 	
-	public final class PrefsActivity extends PreferenceActivity {
 
+
+	public final static class PrefsActivity extends PreferenceActivity {
+
+		static SharedPreferences sp;
+		
 		@SuppressWarnings("deprecation")
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preferences_location);
 			setContentView(R.layout.preferences_general);
+			if(sp == null){
+				PrefsActivity.sp = getPreferences(MODE_WORLD_READABLE);
+			}
 		}
 	}
 
-	public final class SetLocationMapActivity extends MapActivity {
+	public final static class SetLocationMapActivity extends MapActivity {
 
 		GeoPoint p;
 
@@ -132,7 +145,7 @@ public class OnLocationCondition extends Condition {
 			@Override
 			public boolean onTouchEvent(MotionEvent event, MapView mapView) {
 				// ---when user lifts his finger---
-				if (event.getAction() == 1) {
+				if (event.getAction() == 1){
 					p = mapView.getProjection().fromPixels((int) event.getX(),
 							(int) event.getY());
 					MapView map = (MapView) findViewById(R.id.mapviewselect);
@@ -161,14 +174,13 @@ public class OnLocationCondition extends Condition {
 				@Override
 				public void onClick(View v) {
 					if (p != null) {
-						SharedPreferences sp = null; // TODO
-						sp.edit().putInt("longitud", p.getLongitudeE6());
-						sp.edit().putInt("latitud", p.getLatitudeE6());
+						OnLocationCondition.PrefsActivity.sp.edit().putInt("longitud", p.getLongitudeE6());
+						OnLocationCondition.PrefsActivity.sp.edit().putInt("latitud", p.getLatitudeE6());
 
 						SetLocationMapActivity.this.finish();
 
 					} else {
-						// TODO toast!!
+		                Toast.makeText(SetLocationMapActivity.this, "Select some location!!", Toast.LENGTH_SHORT).show();
 					}
 
 				}
@@ -193,7 +205,7 @@ public class OnLocationCondition extends Condition {
 
 	}
 
-	public final class SetPlaceMapActivity extends MapActivity {
+	public final static class SetPlaceMapActivity extends MapActivity {
 
 		GeoPoint p;
 
@@ -265,7 +277,9 @@ public class OnLocationCondition extends Condition {
 				@Override
 				public void onClick(View v) {
 					if (p != null) {
-						//TODO update data!!
+						OnLocationCondition.PrefsActivity.sp.edit().putInt("longitud", p.getLongitudeE6());
+						OnLocationCondition.PrefsActivity.sp.edit().putInt("latitud", p.getLatitudeE6());
+
 		                Toast.makeText(SetPlaceMapActivity.this, "Actualizar datos!!", Toast.LENGTH_SHORT).show();
 						SetPlaceMapActivity.this.finish();
 
