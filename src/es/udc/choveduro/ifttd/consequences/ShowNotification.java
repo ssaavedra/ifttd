@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import es.udc.choveduro.ifttd.conditions.OnLocationCondition.PrefsActivity;
 import es.udc.choveduro.ifttd.types.CallbackIF;
 import es.udc.choveduro.ifttd.types.Consequence;
 import es.udc.choveduro.ifttd.EasyActivity;
@@ -55,14 +56,19 @@ public class ShowNotification extends Consequence {
 		return "Shows \"" + configuration.get("text") + "\".";
 	}
 	
-	public class PrefsActivity extends PreferenceActivity {
-
+	public static class PrefsActivity extends PreferenceActivity {
+		static SharedPreferences sp;
+		
 		@SuppressWarnings("deprecation")
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preferences_notification);
 			setContentView(R.layout.preferences_general);
+			if(sp == null){
+				PrefsActivity.sp = getPreferences(MODE_WORLD_READABLE);
+
+			}
 		}
 	}
 
@@ -93,7 +99,7 @@ public class ShowNotification extends Consequence {
 
 			@Override
 			public void resultOK(String resultString, Bundle resultMap) {
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+				SharedPreferences prefs = ShowNotification.PrefsActivity.sp;
 
 				HashMap<String, String> configuration = ShowNotification.this.getConfig();
 				configuration.put("texto", prefs.getString("text", "Mensaje!!"));
