@@ -3,12 +3,9 @@ package es.udc.choveduro.ifttd.types;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,37 +25,15 @@ import es.udc.choveduro.ifttd.DashboardActivity;
 import es.udc.choveduro.ifttd.EasyActivity;
 import es.udc.choveduro.ifttd.R;
 import es.udc.choveduro.ifttd.service.OwlService;
-import es.udc.choveduro.ifttd.service.OwlService.OwlBinder;
 
 public abstract class ConfigurablesListActivity<T extends Configurable> extends
 		EasyActivity {
 
-	protected OwlService mService;
-	protected boolean mBound;
-	private ProgressDialog loading;
 	public static final String LOG_NAME = DashboardActivity.class.getName();
+	protected OwlService mService;
 
-	List<Accion> loadedActions = new ArrayList<Accion>();
-	Accion.Adapter loadedActionsAdapter = null;
-
-	/** Defines callbacks for service binding, passed to bindService() */
-	private ServiceConnection mConnection = new ServiceConnection() {
-
-		@Override
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			// We've bound to LocalService, cast the IBinder and get
-			// LocalService instance
-			OwlBinder binder = (OwlBinder) service;
-			mService = binder.getService();
-			mBound = true;
-			loading.dismiss();
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName arg0) {
-			mBound = false;
-		}
-	};
+	ArrayList<T> loadedItems = new ArrayList<T>();
+	ItemAdapter<T> loadedItemsAdapter = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,8 +41,9 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 		setContentView(R.layout.cond_or_cons_list);
 		ListView l = (ListView) findViewById(R.id.configurable_list);
 
-		l.setAdapter(new ItemAdapter<T>(this, R.layout.cond_or_cons_item,
-				getItems()));
+		loadedItemsAdapter = new ItemAdapter<T>(this, R.layout.cond_or_cons_item,
+				loadedItems);
+		l.setAdapter(loadedItemsAdapter);
 		l.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> listView, View child,
@@ -75,6 +51,14 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 				onClickedAction(position);
 			}
 		});
+	}
+	
+	@Override
+	public void onServiceConnected(OwlService service) {
+		mService = service;
+		Log.w(LOG_NAME, "Connected to service.");
+		Log.e(LOG_NAME, "Service has this arraylist: " + fetchFromService());
+		loadedItemsAdapter.addAll(fetchFromService());
 	}
 
 	/**
@@ -97,7 +81,10 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 	 * @return the items got by the server previously
 	 */
 	private ArrayList<T> getItems() {
-		return fetchFromService();
+		if(mService != null)
+			return fetchFromService();
+		else
+			return null;
 	}
 
 	@Override
@@ -152,8 +139,8 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 				}
 
 			});
-			holder.name.setText(ctx.getItems().get(position).getName());
-			holder.img.setImageResource(ctx.getItems().get(position)
+			holder.name.setText(ctx.loadedItems.get(position).getName());
+			holder.img.setImageResource(ctx.loadedItems.get(position)
 					.getImageResource());
 
 			return (item);
@@ -186,6 +173,7 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 	}
 
 	protected void onClickedAction(int position) {
+		Log.i(LOG_NAME, new StringBuffer("Clicked action at position ").append(Integer.toString(position)).toString());
 		getItems().get(position).configure(this, new Callback(this, position));
 	}
 
