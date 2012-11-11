@@ -4,8 +4,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_dashboard">IFTTD</string>
-    <string name="condition">Condición</string>
-    <string name="consequence">Consecuencia</string>
+    <string name="condition">Condition</string>
+    <string name="consequence">Consequence</string>
     <string name="loading">Loading…</string>
     <string name="cons_notif_cat_text">Texto a mostrar</string>
     <string name="cons_notif_cat_ledcolor"></string>
@@ -13,6 +13,7 @@
     <string name="accept">Accept</string>
     <string name="title_activity_list_conds_or_cons">ListCondsOrConsActivity</string>
     <string name="delete_action">Delete action</string>
-    <string name="GoogleMapsAPIKey">KEY</string>
+    <string name="title_activity_condition_selector">Select a condition</string>
+    <string name="title_activity_consequence_selector">Select a consequence</string>
 
 </resources>

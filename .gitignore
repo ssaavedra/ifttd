@@ -18,3 +18,6 @@ local.properties
 # Eclipse config file
 .classpath
 .settings
+.project
+project.properties
+

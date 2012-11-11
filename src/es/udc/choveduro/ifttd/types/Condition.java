@@ -1,19 +1,19 @@
 package es.udc.choveduro.ifttd.types;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.dao.Dao;
 
 import es.udc.choveduro.ifttd.EasyActivity;
 
-@DatabaseTable(tableName = "conditions")
-abstract public class Condition extends CondOrCons {
-
-	@DatabaseField(id = true, foreign = true)
-	private Accion belong_to;
-
-	@DatabaseField
+abstract public class Condition implements Configurable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8599129405886266978L;
 	private HashMap<String, String> config = new HashMap<String, String>();
 
 	/**
@@ -56,5 +56,25 @@ abstract public class Condition extends CondOrCons {
 	 */
 
 	public abstract void configure(EasyActivity ctx, CallbackIF callback);
+
+	public static class DAO extends BaseDaoImpl<Condition, Accion> implements
+			Dao<Condition, Accion> {
+
+		protected DAO(Class<Condition> dataClass) throws SQLException {
+			super(dataClass);
+			// TODO Auto-generated constructor stub
+		}
+
+	}
+
+	public static class Activity extends ConfigurablesListActivity<Condition> {
+		protected ArrayList<Condition> fetchFromService() {
+			return mService.getConditions();
+		}
+
+		protected void tellService(int position) {
+			mService.setTransactionCondition(position);
+		}
+	}
 
 }

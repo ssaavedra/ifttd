@@ -2,22 +2,83 @@ package es.udc.choveduro.ifttd;
 
 import java.util.Random;
 
-import com.actionbarsherlock.app.SherlockActivity;
-
-import es.udc.choveduro.ifttd.types.CallbackIF;
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.util.SparseArray;
+
+import com.actionbarsherlock.app.SherlockActivity;
+
+import es.udc.choveduro.ifttd.service.OwlService;
+import es.udc.choveduro.ifttd.service.OwlService.OwlBinder;
+import es.udc.choveduro.ifttd.types.CallbackIF;
 
 public class EasyActivity extends SherlockActivity {
 
 	/** holds the map of callbacks */
 	protected SparseArray<CallbackIF> _callbackMap = new SparseArray<CallbackIF>();
 
-	public EasyActivity() {
-		super();
+	OwlService mService;
+	protected boolean mBound;
+
+	/** Defines callbacks for service binding, passed to bindService() */
+	private ServiceConnection mConnection = new ServiceConnection() {
+
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			// We've bound to LocalService, cast the IBinder and get
+			// LocalService instance
+			OwlBinder binder = (OwlBinder) service;
+			mService = binder.getService();
+			mBound = true;
+			EasyActivity.this.onServiceConnected(mService);
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			mBound = false;
+		}
+	};
+
+	
+	
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+
+		Intent intent = new Intent(this, OwlService.class);
+		this.startService(intent);
+
+		// Bind to service
+		bindService(intent, mConnection, Context.BIND_ADJUST_WITH_ACTIVITY
+				| Context.BIND_AUTO_CREATE);
+
+	}
+	
+	/**
+	 * Overloadable method to talk to server when inited connection.
+	 * @param OwlService
+	 */
+	protected void onServiceConnected(OwlService service) {
+		
+	}
+	
+	/**
+	 * Overloadable method to apply when connection stopped.
+	 */
+	protected void onServiceDisconnected() {
+		
+	}
+	
+	protected void onDestroy() {
+		if(mBound) {
+			unbindService(mConnection);
+		}
 	}
 
 	public void launchActivity(Class<? extends Activity> subActivityClass, CallbackIF callback) {
