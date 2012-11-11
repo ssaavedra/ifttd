@@ -114,7 +114,6 @@ public class Accion {
 	 * This exists so the DAO can act correctly.
 	 */
 	public Accion() {
-
 	}
 
 	public Accion(Condition cond, Consequence consec) {
@@ -141,6 +140,27 @@ public class Accion {
 	 */
 	public STATUS getStatus() {
 		return status;
+	}
+
+	/**
+	 * @param cond the cond to set
+	 */
+	public final void setCond(Condition cond) {
+		this.cond = cond;
+	}
+
+	/**
+	 * @param consec the consec to set
+	 */
+	public final void setConsec(Consequence consec) {
+		this.consec = consec;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public final void setStatus(STATUS status) {
+		this.status = status;
 	}
 
 }

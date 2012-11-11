@@ -58,4 +58,8 @@ public abstract class Consequence implements Configurable {
 	 */
 
 	public abstract void configure(EasyActivity ctx, CallbackIF callback);
+	
+	public void setAction(Accion belonged) {
+		this.belong_to = belonged;
+	}
 }

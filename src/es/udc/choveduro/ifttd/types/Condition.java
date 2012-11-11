@@ -1,5 +1,6 @@
 package es.udc.choveduro.ifttd.types;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -56,5 +57,19 @@ abstract public class Condition implements Configurable {
 	 */
 
 	public abstract void configure(EasyActivity ctx, CallbackIF callback);
+	
+	public void setAction(Accion belonged) {
+		this.belong_to = belonged;
+	}
+	
+	public static class Activity extends ConfigurablesListActivity {
+		protected ArrayList<Condition> fetchFromService() {
+			return mService.getConditions();
+		}
+		
+		protected void tellService(int position) {
+			mService.setTransactionCondition(position);
+		}
+	}
 
 }

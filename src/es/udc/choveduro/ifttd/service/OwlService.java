@@ -89,12 +89,12 @@ public class OwlService extends OrmLiteBaseService<DatabaseHelper> {
 		transactionInProcess = true;
 	}
 
-	public void setTransactionCondition(Condition c) {
-		transactionCond = c;
+	public void setTransactionCondition(int c) {
+		transactionCond = conditionCache.get(c);
 	}
 
-	public void setTransactionConsequence(Consequence c) {
-		transactionConsequence = c;
+	public void setTransactionConsequence(int c) {
+		transactionConsequence = consequenceCache.get(c);
 	}
 
 	public void unwind() {
