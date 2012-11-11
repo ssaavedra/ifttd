@@ -68,16 +68,6 @@ public class OwlService extends OrmLiteBaseService<DatabaseHelper> {
 		return dbh.getAccionDao();
 	}
 
-	@Deprecated
-	public Dao<Condition, Accion> getConditionDao() throws SQLException {
-		return dbh.getConditionDao();
-	}
-
-	@Deprecated
-	public Dao<Consequence, Accion> getConsequenceDao() throws SQLException {
-		return dbh.getConsequenceDao();
-	}
-
 	public ArrayList<Condition> getConditions() {
 		return conditionCache;
 	}
