@@ -1,11 +1,9 @@
 package es.udc.choveduro.ifttd.conditions;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -31,24 +29,30 @@ final public class OnTimeCondition extends Condition {
 	public static class Activity extends ConfigurationActivity {
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState, R.layout.condition_on_time_config);
+			super.onCreate(savedInstanceState,
+					R.layout.condition_on_time_config);
+			try {
+				((DatePicker) findViewById(R.id.ontime_date_picker)).init(
+						configCalendar.get(Calendar.DATE),
+						configCalendar.get(Calendar.MONTH),
+						configCalendar.get(Calendar.YEAR),
+						new DatePicker.OnDateChangedListener() {
 
-			((DatePicker) findViewById(R.id.ontime_date_picker)).init(
-					configCalendar.get(Calendar.DATE),
-					configCalendar.get(Calendar.MONTH),
-					configCalendar.get(Calendar.YEAR),
-					new DatePicker.OnDateChangedListener() {
+							@Override
+							public void onDateChanged(DatePicker view,
+									int year, int monthOfYear, int dayOfMonth) {
+								configCalendar.set(year, monthOfYear,
+										dayOfMonth);
+							}
+						});
+				((TimePicker) findViewById(R.id.ontime_time_picker))
+						.setCurrentHour(configCalendar
+								.get(Calendar.HOUR_OF_DAY));
+				((TimePicker) findViewById(R.id.ontime_time_picker))
+						.setCurrentMinute(configCalendar.get(Calendar.MINUTE));
+			} catch (IllegalArgumentException e) {
 
-						@Override
-						public void onDateChanged(DatePicker view, int year,
-								int monthOfYear, int dayOfMonth) {
-							configCalendar.set(year, monthOfYear, dayOfMonth);
-						}
-					});
-			((TimePicker) findViewById(R.id.ontime_time_picker))
-					.setCurrentHour(configCalendar.get(Calendar.HOUR_OF_DAY));
-			((TimePicker) findViewById(R.id.ontime_time_picker))
-					.setCurrentMinute(configCalendar.get(Calendar.MINUTE));
+			}
 		}
 
 		/**
@@ -62,7 +66,11 @@ final public class OnTimeCondition extends Condition {
 			configCalendar.set(Calendar.MINUTE,
 					((TimePicker) findViewById(R.id.ontime_time_picker))
 							.getCurrentMinute());
-			this.setResult(RESULT_OK, this.getIntent().putExtra("date", configCalendar));
+			Bundle r = new Bundle();
+			r.putSerializable("date", configCalendar);
+
+			this.setResult(RESULT_OK,
+					new Intent().putExtra("result", r));
 		}
 	}
 
@@ -75,8 +83,8 @@ final public class OnTimeCondition extends Condition {
 	public OnTimeCondition() {
 		super();
 		if (getConfig().containsKey("date")) {
-				dateCalendar = (Calendar) getConfig().get("date");
-			
+			dateCalendar = (Calendar) getConfig().get("date");
+
 		}
 	}
 
@@ -92,18 +100,18 @@ final public class OnTimeCondition extends Condition {
 
 	@Override
 	public void configure(EasyActivity ctx, final CallbackIF callback) {
-		ctx.launchActivity(new Activity().getClass(), new CallbackIF() {
+		ctx.launchActivity(Activity.class, new CallbackIF() {
 
 			@Override
-			public void resultOK(String resultString, Bundle resultMap) {
+			public void resultOK(Bundle resultMap) {
 				dateCalendar = (Calendar) resultMap.get("date");
 				setConfig("date", (Calendar) dateCalendar);
-				callback.resultOK(resultString, resultMap);
+				callback.resultOK(resultMap);
 			}
 
 			@Override
-			public void resultCancel(String resultString, Bundle resultMap) {
-				callback.resultCancel(resultString, resultMap);
+			public void resultCancel(Bundle resultMap) {
+				callback.resultCancel(resultMap);
 
 			}
 

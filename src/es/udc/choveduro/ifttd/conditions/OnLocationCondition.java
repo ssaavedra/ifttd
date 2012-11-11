@@ -83,17 +83,17 @@ public class OnLocationCondition extends Condition {
 		ctx.launchActivity(PrefsActivity.class, new CallbackIF(){
 
 			@Override
-			public void resultOK(String resultString, Bundle resultMap) {
+			public void resultOK(Bundle resultMap) {
 				HashMap<String, Serializable> configuration = OnLocationCondition.this.getConfig();
 				configuration.put("latitude", OnLocationCondition.PrefsActivity.sp.getString("latitud", "0"));
 				configuration.put("longitude", OnLocationCondition.PrefsActivity.sp.getString("longitud", "0"));
 				configuration.put("distance", OnLocationCondition.PrefsActivity.sp.getString("distance", "0"));
-				callback.resultCancel(resultString, resultMap);
+				callback.resultCancel(resultMap);
 			}
 
 			@Override
-			public void resultCancel(String resultString, Bundle resultMap) {
-				callback.resultCancel(resultString, resultMap);
+			public void resultCancel(Bundle resultMap) {
+				callback.resultCancel(resultMap);
 				
 			}
 			

@@ -118,14 +118,14 @@ public class DashboardActivity extends EasyActivity {
 		}
 
 		@Override
-		public void resultOK(String resultString, Bundle resultMap) {
+		public void resultOK(Bundle resultMap) {
 			int currentCondition = resultMap.getInt("position");
 			ctx.launchActivity(Consequence.Activity.class,
 					ctx.new Callback_Consequence(ctx, currentCondition));
 		}
 
 		@Override
-		public void resultCancel(String resultString, Bundle resultMap) {
+		public void resultCancel(Bundle resultMap) {
 			ctx.mService.unwind();
 		}
 
@@ -141,7 +141,7 @@ public class DashboardActivity extends EasyActivity {
 		}
 
 		@Override
-		public void resultOK(String resultString, Bundle resultMap) {
+		public void resultOK(Bundle resultMap) {
 			// Hoorray, refresh my array
 			try {
 				loadedActions.add(mService.getAccionDao().queryForId(
@@ -153,7 +153,7 @@ public class DashboardActivity extends EasyActivity {
 		}
 
 		@Override
-		public void resultCancel(String resultString, Bundle resultMap) {
+		public void resultCancel(Bundle resultMap) {
 			mService.unwind();
 		}
 	}

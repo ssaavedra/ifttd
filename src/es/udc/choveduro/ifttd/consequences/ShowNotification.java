@@ -28,6 +28,11 @@ public class ShowNotification extends Consequence {
 	
 	/**
 	 * 
+	 */
+	private static final long serialVersionUID = 8265959531069344967L;
+
+	/**
+	 * 
 	 * @see es.udc.choveduro.ifttd.types.Consequence#getName()
 	 */
 	@Override
@@ -99,18 +104,18 @@ public class ShowNotification extends Consequence {
 		ctx.launchActivity(PrefsActivity.class, new CallbackIF(){
 
 			@Override
-			public void resultOK(String resultString, Bundle resultMap) {
+			public void resultOK(Bundle resultMap) {
 				SharedPreferences prefs = ShowNotification.PrefsActivity.sp;
 
 				HashMap<String, Serializable> configuration = ShowNotification.this.getConfig();
 				configuration.put("texto", prefs.getString("text", "Mensaje!!"));
 				configuration.put("ledcolor", prefs.getString("ledcolor", "blanco"));
-				callback.resultOK(resultString, resultMap);
+				callback.resultOK(resultMap);
 			}
 
 			@Override
-			public void resultCancel(String resultString, Bundle resultMap) {
-				callback.resultCancel(resultString, resultMap);			
+			public void resultCancel(Bundle resultMap) {
+				callback.resultCancel(resultMap);			
 			}
 		});
 		

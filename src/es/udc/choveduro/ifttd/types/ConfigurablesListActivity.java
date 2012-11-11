@@ -3,6 +3,7 @@ package es.udc.choveduro.ifttd.types;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -169,17 +170,17 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 		}
 
 		@Override
-		public void resultOK(String resultString, Bundle resultMap) {
+		public void resultOK(Bundle resultMap) {
 			ctx.tellService(position);
 			Toast.makeText(ctx, "Got configuration result OK",
 					Toast.LENGTH_SHORT).show();
-			ctx.setResult(RESULT_OK,
-					ctx.getIntent().putExtra("position", position));
-
+			Bundle r = new Bundle();
+			r.putInt("position", position);
+			ctx.setResult(RESULT_OK, new Intent().putExtra("result", r));
 		}
 
 		@Override
-		public void resultCancel(String resultString, Bundle resultMap) {
+		public void resultCancel(Bundle resultMap) {
 			ctx.setResult(RESULT_CANCELED);
 			ctx.finish();
 		}

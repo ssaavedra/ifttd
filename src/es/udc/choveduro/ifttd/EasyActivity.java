@@ -45,10 +45,7 @@ public class EasyActivity extends SherlockActivity {
 		}
 	};
 
-	
-	
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		Intent intent = new Intent(this, OwlService.class);
@@ -59,40 +56,45 @@ public class EasyActivity extends SherlockActivity {
 				| Context.BIND_AUTO_CREATE);
 
 	}
-	
+
 	/**
 	 * Overloadable method to talk to server when inited connection.
+	 * 
 	 * @param OwlService
 	 */
 	protected void onServiceConnected(OwlService service) {
-		
+
 	}
-	
+
 	/**
 	 * Overloadable method to apply when connection stopped.
 	 */
 	protected void onServiceDisconnected() {
-		
+
 	}
-	
+
 	protected void onDestroy() {
 		super.onDestroy();
-		if(mBound) {
+		if (mBound) {
 			unbindService(mConnection);
 		}
 	}
 
-	public void launchActivity(Class<? extends Activity> subActivityClass, CallbackIF callback) {
-	
+	final public void launchActivity(
+			Class<? extends Activity> subActivityClass, CallbackIF callback) {
+
 		Intent i = new Intent(this, subActivityClass);
-	
+
 		Random rand = new Random();
 		int correlationId = rand.nextInt();
-	
+
 		_callbackMap.put(correlationId, callback);
-	
+
+		Log.w(this.getClass().getName(),
+				"Launching activity with correlationID="
+						+ Integer.toString(correlationId));
 		startActivityForResult(i, correlationId);
-	
+
 	}
 
 	/**
@@ -100,28 +102,33 @@ public class EasyActivity extends SherlockActivity {
 	 * handles auto generation of correlationIds and adding/removing callback
 	 * functors to handle the result
 	 */
-	protected void onActivityResult(int correlationId, int resultCode, String paramStr,
-			Bundle paramMap) {
-			
-				try {
-					CallbackIF callback = _callbackMap.get(correlationId);
-			
-					switch (resultCode) {
-					case Activity.RESULT_CANCELED:
-						callback.resultCancel(paramStr, paramMap);
-						_callbackMap.remove(correlationId);
-						break;
-					case Activity.RESULT_OK:
-						callback.resultOK(paramStr, paramMap);
-						_callbackMap.remove(correlationId);
-						break;
-					default:
-						Log.e("OOPS",
-								"Couldn't find callback handler for correlationId");
-					}
-				} catch (Exception e) {
-					Log.e("OOPS", "Problem processing result from sub-activity", e);
-				}
+	@Override
+	final protected void onActivityResult(int correlationId, int resultCode,
+			Intent i) {
+
+		Log.w(this.getClass().getName(), "Getting activity result");
+		try {
+			CallbackIF callback = _callbackMap.get(correlationId);
+
+			switch (resultCode) {
+			case Activity.RESULT_CANCELED:
+				if (i != null)
+					callback.resultCancel(i.getBundleExtra("result"));
+				else
+					callback.resultCancel(null);
+				_callbackMap.remove(correlationId);
+				break;
+			case Activity.RESULT_OK:
+				callback.resultOK(i.getBundleExtra("result"));
+				_callbackMap.remove(correlationId);
+				break;
+			default:
+				Log.e("OOPS",
+						"Couldn't find callback handler for correlationId");
 			}
+		} catch (Exception e) {
+			Log.e("OOPS", "Problem processing result from sub-activity", e);
+		}
+	}
 
 }
