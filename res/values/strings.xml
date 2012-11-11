@@ -15,5 +15,6 @@
     <string name="delete_action">Delete action</string>
     <string name="title_activity_condition_selector">Select a condition</string>
     <string name="title_activity_consequence_selector">Select a consequence</string>
+    <string name="GoogleMapsAPIKey">API</string>
 
 </resources>
