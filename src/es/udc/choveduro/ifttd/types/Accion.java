@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -101,10 +102,10 @@ public class Accion {
 	@DatabaseField(generatedId = true)
 	private int id;
 
-	@DatabaseField(canBeNull = true, foreign = true)
+	@DatabaseField(canBeNull = true, dataType = DataType.SERIALIZABLE)
 	private Condition cond;
 
-	@DatabaseField(canBeNull = true, foreign = true)
+	@DatabaseField(canBeNull = true, dataType = DataType.SERIALIZABLE)
 	private Consequence consec;
 
 	@DatabaseField()
