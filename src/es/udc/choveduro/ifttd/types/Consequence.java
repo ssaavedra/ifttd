@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import es.udc.choveduro.ifttd.EasyActivity;
 
 @DatabaseTable(tableName = "consequences")
-public abstract class Consequence extends CondOrCons {
+public abstract class Consequence implements Configurable {
 
 	@DatabaseField(id = true, foreign = true)
 	private Accion belong_to;

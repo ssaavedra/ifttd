@@ -8,7 +8,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import es.udc.choveduro.ifttd.EasyActivity;
 
 @DatabaseTable(tableName = "conditions")
-abstract public class Condition extends CondOrCons {
+abstract public class Condition implements Configurable {
 
 	@DatabaseField(id = true, foreign = true)
 	private Accion belong_to;

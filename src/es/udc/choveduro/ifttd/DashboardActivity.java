@@ -30,12 +30,12 @@ import es.udc.choveduro.ifttd.service.OwlService.OwlBinder;
 import es.udc.choveduro.ifttd.types.Accion;
 import es.udc.choveduro.ifttd.types.CallbackIF;
 import es.udc.choveduro.ifttd.types.Condition;
-import es.udc.choveduro.ifttd.types.ConditionSelectorActivity;
+import es.udc.choveduro.ifttd.types.ConfigurablesListActivity;
 import es.udc.choveduro.ifttd.types.Consequence;
 
 public class DashboardActivity extends EasyActivity {
 
-	protected OwlService mService;
+	OwlService mService;
 	protected boolean mBound;
 	private ProgressDialog loading;
 	public static final String LOG_NAME = DashboardActivity.class.getName();
@@ -126,54 +126,72 @@ public class DashboardActivity extends EasyActivity {
 	}
 
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		unbindService(mConnection);
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.menu_actionbar, menu);
 		return true;
 	}
 
+	final public static class Callback_Condition implements CallbackIF {
+		private DashboardActivity ctx;
+
+		public Callback_Condition(DashboardActivity ctx) {
+			this.ctx = ctx;
+		}
+		@Override
+		public void resultOK(String resultString, Bundle resultMap) {
+			int currentCondition = resultMap.getInt("position");
+			ctx.launchActivity(ConfigurablesListActivity.class, ctx.new Callback_Consequence(ctx, currentCondition));
+		}
+
+		@Override
+		public void resultCancel(String resultString, Bundle resultMap) {
+		}
+
+	}
+	
+	final public class Callback_Consequence implements CallbackIF {
+		private EasyActivity ctx;
+		private int cond;
+		
+		public Callback_Consequence(EasyActivity ctx, int cond) {
+			this.ctx = ctx;
+			this.cond = cond;
+		}
+
+		@Override
+		public void resultOK(String resultString, Bundle resultMap) {
+			// Hoorray, refresh my array
+			try {
+				loadedActions.add(mService.getAccionDao().queryForId(resultMap.getInt("id")));
+			} catch (SQLException e) {
+				Log.e(LOG_NAME, "Err, could not get recently created action.", e);
+			}
+		}
+
+		@Override
+		public void resultCancel(String resultString, Bundle resultMap) {
+			// Cleanup service variables.
+		}
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.add_icon) {
 			Toast.makeText(this, "Añadir pulsado", Toast.LENGTH_SHORT).show();
-			final Condition cond;
-			final Consequence cons;
 
-			this.launchActivity(ConditionSelectorActivity.class,
-					new CallbackIF() {
+			launchActivity(ConfigurablesListActivity.class,
+					new Callback_Condition(this));
 
-						@Override
-						public void resultOK(String resultString,
-								Bundle resultMap) {
-							cond = null;
-							DashboardActivity.this.addActionStep1(cond);
-						}
-
-						@Override
-						public void resultCancel(String resultString,
-								Bundle resultMap) {
-							DashboardActivity.this.addCancel();
-						}
-
-					});
+			return true;
 		}
-		return true;
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		unbindService(mConnection);
-	}
-
-	protected void addCancel() {
-		// TODO Auto-generated method stub
-
-	}
-
-	protected void addActionStep1(Condition cond) {
-		// TODO Auto-generated method stub
-
+		return false;
 	}
 
 }
