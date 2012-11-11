@@ -1,12 +1,17 @@
 package es.udc.choveduro.ifttd.types;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.MethodNotSupportedException;
 
+import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,42 +27,83 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 
+import es.udc.choveduro.ifttd.DashboardActivity;
 import es.udc.choveduro.ifttd.EasyActivity;
 import es.udc.choveduro.ifttd.R;
 import es.udc.choveduro.ifttd.R.id;
 import es.udc.choveduro.ifttd.R.layout;
 import es.udc.choveduro.ifttd.R.menu;
+import es.udc.choveduro.ifttd.service.OwlService;
+import es.udc.choveduro.ifttd.service.OwlService.OwlBinder;
 
-public abstract class ConfigurablesListActivity extends EasyActivity {
+public abstract class ConfigurablesListActivity<T extends Configurable> extends
+		EasyActivity {
+
+	protected OwlService mService;
+	protected boolean mBound;
+	private ProgressDialog loading;
+	public static final String LOG_NAME = DashboardActivity.class.getName();
+
+	List<Accion> loadedActions = new ArrayList<Accion>();
+	Accion.Adapter loadedActionsAdapter = null;
+
+	/** Defines callbacks for service binding, passed to bindService() */
+	private ServiceConnection mConnection = new ServiceConnection() {
+
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			// We've bound to LocalService, cast the IBinder and get
+			// LocalService instance
+			OwlBinder binder = (OwlBinder) service;
+			mService = binder.getService();
+			mBound = true;
+			loading.dismiss();
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			mBound = false;
+		}
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cond_or_cons_list);
 		ListView l = (ListView) findViewById(R.id.configurable_list);
-		
-		
-		
-		l.setAdapter(new ItemAdapter(this, R.layout.cond_or_cons_item, getItems()));
+
+		l.setAdapter(new ItemAdapter<T>(this, R.layout.cond_or_cons_item,
+				getItems()));
 		l.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> listView, View child, int position,
-					long id) {
+			public void onItemClick(AdapterView<?> listView, View child,
+					int position, long id) {
 				onClickedAction(position);
 			}
 		});
 	}
-	
+
 	/**
-	 * @return the name to call for to the server
+	 * @return the items got from the server
 	 */
-	abstract protected String whichItems();
+	abstract protected ArrayList<T> fetchFromService();
+
+	/**
+	 * Make server aware of the selected position on graceful exit.
+	 * 
+	 * @param position
+	 */
+	abstract protected void tellService(int position);
+
+	protected void tellUnwind() {
+		mService.unwind();
+	}
 
 	/**
 	 * @return the items got by the server previously
 	 */
-	private ArrayList<Configurable> getItems() {
-		return null;
+	private ArrayList<T> getItems() {
+		return fetchFromService();
 	}
 
 	@Override
@@ -66,7 +112,7 @@ public abstract class ConfigurablesListActivity extends EasyActivity {
 		return true;
 	}
 
-	public static class ItemAdapter extends ArrayAdapter<Configurable> {
+	public static class ItemAdapter<T> extends ArrayAdapter<T> {
 
 		final static class ViewHolder {
 			TextView name;
@@ -74,11 +120,12 @@ public abstract class ConfigurablesListActivity extends EasyActivity {
 			ImageButton arrow;
 		}
 
-		private ConfigurablesListActivity ctx;
+		private ConfigurablesListActivity<? extends Configurable> ctx;
 
-		public ItemAdapter(ConfigurablesListActivity context,
-				int textViewResourceId, List<Configurable> objects) {
-			super(context, textViewResourceId, objects);
+		public ItemAdapter(
+				ConfigurablesListActivity<? extends Configurable> context,
+				int textViewResourceId, ArrayList<T> arrayList) {
+			super(context, textViewResourceId, arrayList);
 			this.ctx = context;
 		}
 
@@ -106,7 +153,8 @@ public abstract class ConfigurablesListActivity extends EasyActivity {
 
 				@Override
 				public void onClick(View v) {
-					Toast.makeText(ctx, "Pressed arrow", Toast.LENGTH_SHORT).show();
+					Toast.makeText(ctx, "Pressed arrow", Toast.LENGTH_SHORT)
+							.show();
 				}
 
 			});
@@ -117,20 +165,22 @@ public abstract class ConfigurablesListActivity extends EasyActivity {
 			return (item);
 		}
 	}
-	
+
 	public static class Callback implements CallbackIF {
-		private ConfigurablesListActivity ctx;
+		private ConfigurablesListActivity<? extends Configurable> ctx;
 		private int position;
 
-		public Callback(ConfigurablesListActivity ctx, int position) {
+		public Callback(ConfigurablesListActivity<? extends Configurable> ctx, int position) {
 			this.ctx = ctx;
 			this.position = position;
 		}
 
 		@Override
 		public void resultOK(String resultString, Bundle resultMap) {
-			ctx.setResult(RESULT_OK, ctx.getIntent().putExtra("position", position));
-			
+			ctx.tellService(position);
+			ctx.setResult(RESULT_OK,
+					ctx.getIntent().putExtra("position", position));
+
 		}
 
 		@Override
