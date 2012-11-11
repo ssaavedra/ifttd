@@ -178,6 +178,7 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 		@Override
 		public void resultOK(String resultString, Bundle resultMap) {
 			ctx.tellService(position);
+			Toast.makeText(ctx, "Got configuration result OK", Toast.LENGTH_SHORT).show();
 			ctx.setResult(RESULT_OK,
 					ctx.getIntent().putExtra("position", position));
 

@@ -62,7 +62,7 @@ abstract public class Condition implements Configurable {
 		this.belong_to = belonged;
 	}
 	
-	public static class Activity extends ConfigurablesListActivity {
+	public static class Activity extends ConfigurablesListActivity<Condition> {
 		protected ArrayList<Condition> fetchFromService() {
 			return mService.getConditions();
 		}

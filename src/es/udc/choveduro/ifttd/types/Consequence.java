@@ -1,5 +1,6 @@
 package es.udc.choveduro.ifttd.types;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Context;
@@ -61,5 +62,15 @@ public abstract class Consequence implements Configurable {
 	
 	public void setAction(Accion belonged) {
 		this.belong_to = belonged;
+	}
+	
+	public static class Activity extends ConfigurablesListActivity<Consequence> {
+		protected ArrayList<Consequence> fetchFromService() {
+			return mService.getConsequences();
+		}
+		
+		protected void tellService(int position) {
+			mService.setTransactionConsequence(position);
+		}
 	}
 }
