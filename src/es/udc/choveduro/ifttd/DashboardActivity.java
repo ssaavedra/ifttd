@@ -1,5 +1,6 @@
 package es.udc.choveduro.ifttd;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,6 @@ import es.udc.choveduro.ifttd.service.OwlService;
 import es.udc.choveduro.ifttd.types.Accion;
 import es.udc.choveduro.ifttd.types.CallbackIF;
 import es.udc.choveduro.ifttd.types.Condition;
-import es.udc.choveduro.ifttd.types.ConfigurablesListActivity;
 import es.udc.choveduro.ifttd.types.Consequence;
 
 public class DashboardActivity extends EasyActivity {
@@ -46,13 +46,10 @@ public class DashboardActivity extends EasyActivity {
 		}
 	}
 
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dashboard);
-		
-		List<Accion> values = new ArrayList<Accion>();
 
 		// Put a progressbar until we are actually connected to the service.
 		loading = ProgressDialog.show(this, "Initializing",
@@ -100,7 +97,7 @@ public class DashboardActivity extends EasyActivity {
 			}
 		});
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -166,8 +163,8 @@ public class DashboardActivity extends EasyActivity {
 		if (item.getItemId() == R.id.add_icon) {
 			Toast.makeText(this, "Añadir pulsado", Toast.LENGTH_SHORT).show();
 
-			launchActivity(Condition.Activity.class,
-					new Callback_Condition(this));
+			launchActivity(Condition.Activity.class, new Callback_Condition(
+					this));
 
 			return true;
 		}

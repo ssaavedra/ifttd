@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.j256.ormlite.android.apptools.OrmLiteBaseService;
 import com.j256.ormlite.dao.Dao;
 
+import es.udc.choveduro.ifttd.conditions.OnLocationCondition;
 import es.udc.choveduro.ifttd.conditions.OnTimeCondition;
 import es.udc.choveduro.ifttd.consequences.ShowNotification;
 import es.udc.choveduro.ifttd.types.Accion;
@@ -44,6 +45,7 @@ public class OwlService extends OrmLiteBaseService<DatabaseHelper> {
 		dbh = new DatabaseHelper(this);
 		Log.i(TAG, "Creating service");
 		conditionCache.add(new OnTimeCondition());
+		conditionCache.add(new OnLocationCondition());
 		consequenceCache.add(new ShowNotification());
 	}
 

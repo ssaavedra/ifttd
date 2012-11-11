@@ -1,7 +1,6 @@
 package es.udc.choveduro.ifttd.types;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,18 +40,26 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 		setContentView(R.layout.cond_or_cons_list);
 		ListView l = (ListView) findViewById(R.id.configurable_list);
 
-		loadedItemsAdapter = new ItemAdapter<T>(this, R.layout.cond_or_cons_item,
-				loadedItems);
+		loadedItemsAdapter = new ItemAdapter<T>(this,
+				R.layout.cond_or_cons_item, loadedItems);
 		l.setAdapter(loadedItemsAdapter);
-		l.setOnItemClickListener(new OnItemClickListener() {
+		l.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
-			public void onItemClick(AdapterView<?> listView, View child,
+			public void onItemSelected(AdapterView<?> listView, View child,
 					int position, long id) {
+
+				Log.i(LOG_NAME, new StringBuffer("Clicked action at position ")
+						.append(Integer.toString(position)).toString());
 				onClickedAction(position);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
 			}
 		});
 	}
-	
+
 	@Override
 	public void onServiceConnected(OwlService service) {
 		mService = service;
@@ -81,7 +88,7 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 	 * @return the items got by the server previously
 	 */
 	private ArrayList<T> getItems() {
-		if(mService != null)
+		if (mService != null)
 			return fetchFromService();
 		else
 			return null;
@@ -151,7 +158,8 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 		private ConfigurablesListActivity<? extends Configurable> ctx;
 		private int position;
 
-		public Callback(ConfigurablesListActivity<? extends Configurable> ctx, int position) {
+		public Callback(ConfigurablesListActivity<? extends Configurable> ctx,
+				int position) {
 			this.ctx = ctx;
 			this.position = position;
 		}
@@ -159,7 +167,8 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 		@Override
 		public void resultOK(String resultString, Bundle resultMap) {
 			ctx.tellService(position);
-			Toast.makeText(ctx, "Got configuration result OK", Toast.LENGTH_SHORT).show();
+			Toast.makeText(ctx, "Got configuration result OK",
+					Toast.LENGTH_SHORT).show();
 			ctx.setResult(RESULT_OK,
 					ctx.getIntent().putExtra("position", position));
 
@@ -173,7 +182,9 @@ public abstract class ConfigurablesListActivity<T extends Configurable> extends
 	}
 
 	protected void onClickedAction(int position) {
-		Log.i(LOG_NAME, new StringBuffer("Clicked action at position ").append(Integer.toString(position)).toString());
+		Log.i(LOG_NAME,
+				new StringBuffer("Clicked action at position ").append(
+						Integer.toString(position)).toString());
 		getItems().get(position).configure(this, new Callback(this, position));
 	}
 

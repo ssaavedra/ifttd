@@ -1,5 +1,6 @@
 package es.udc.choveduro.ifttd.types;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,12 +13,12 @@ public abstract class Consequence implements Configurable {
 	 * 
 	 */
 	private static final long serialVersionUID = -4520633075659609740L;
-	private HashMap<String, String> config = new HashMap<String, String>();
+	private HashMap<String, Serializable> config = new HashMap<String, Serializable>();
 
 	/**
 	 * @return the config
 	 */
-	protected final HashMap<String, String> getConfig() {
+	protected final HashMap<String, Serializable> getConfig() {
 		return config;
 	}
 
@@ -25,7 +26,7 @@ public abstract class Consequence implements Configurable {
 	 * @param config
 	 *            the config to set
 	 */
-	protected final void setConfig(HashMap<String, String> config) {
+	protected final void setConfig(HashMap<String, Serializable> config) {
 		this.config = config;
 	}
 
